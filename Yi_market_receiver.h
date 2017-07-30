@@ -7,10 +7,10 @@
 using namespace std;
 
 namespace Yi{
-class MyMarketAPi: public CThostFtdcMdSpi{
+class MyMarketApi: public CThostFtdcMdSpi{
 public:
 	//use mdapi to construct an instance
-	MyMarketAPi(CThostFtdcMdApi *mdapi);
+	MyMarketApi(CThostFtdcMdApi *mdapi);
 	//construct connection
 	void OnFrontConnected();
 	//Response the login request
@@ -35,6 +35,10 @@ private:
 	CThostFtdcMdApi *mymdapi;
 	CThostFtdcReqUserLoginField *mylogin;
 	int myloginID;
+	string broker;
+	string user_id;
+	string password;
+	string instrumentID;
 }
 
 

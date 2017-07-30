@@ -5,3 +5,4 @@
 #define MARKET_FRONT_IP "180.168.146.187:10010"
 #define USER_ID "aaa"
 #define USER_PWD "bbb"
+#define INSTRUMENT "rb1710"
