@@ -1,9 +1,8 @@
-//used to receive market
 #ifndef YI_MD_API
 #define YI_MD_API
-#include<iostream>
-#include<string>
-#include"TradeApi/CThostFtdcMdApi.h"
+#endif
+
+#include"TradeApi/ThostFtdcMdApi.h"
 using namespace std;
 
 namespace Yi{
@@ -26,11 +25,7 @@ public:
 
 	//disconnected
 	void OnFrontDisconnected(int nReason){};	
-
-	//Response the logout request
-	void OnRspUserLogout(CThostFtdcUserLogoutField *pUserLogout, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 	
-
 private:
 	CThostFtdcMdApi *mymdapi;
 	CThostFtdcReqUserLoginField *mylogin;
@@ -38,8 +33,8 @@ private:
 	string broker;
 	string user_id;
 	string password;
-	string instrumentID;
-}
+	char* instrumentID[];
+};
 
 
 }
