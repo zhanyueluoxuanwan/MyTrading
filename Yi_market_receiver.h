@@ -3,6 +3,11 @@
 #endif
 
 #include"TradeApi/ThostFtdcMdApi.h"
+#include<iostream>
+#include<ctime>
+#include<cstring>
+#include<string>
+#include<fstream>
 using namespace std;
 
 namespace Yi{
@@ -19,7 +24,10 @@ public:
 
 	//require market data
 	void OnRspSubMarketData(CThostFtdcSpecificInstrumentField *pSpecificInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
-
+	
+	//receive data
+	void OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *MarketData);
+	
 	//cancel market data
 	void OnRspUnSubMarketData(CThostFtdcSpecificInstrumentField *pSpecificInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 
@@ -34,6 +42,10 @@ private:
 	string user_id;
 	string password;
 	char* instrumentID[];
+	int instrumentNum;
+	string market_file_name;
+	fstream market_file;
+	tm *market_time;
 };
 
 

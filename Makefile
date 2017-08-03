@@ -2,7 +2,7 @@
 CC = g++
 
 #enable warning, 64bit compiler
-CXXFLAGS = -Wall -fPIC
+CXXFLAGS = -std=c++11 -Wall -fPIC
 
 #source files
 CCFILES = Yi_market_receiver.cc main.cc

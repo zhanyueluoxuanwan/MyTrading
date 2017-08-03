@@ -1,5 +1,3 @@
-#include<iostream>
-#include<cstring>
 #include"Yi_market_receiver.h"
 #include"Yi_parameters.h"
 #include "./TradeApi/ThostFtdcUserApiStruct.h"
@@ -7,8 +5,37 @@ using namespace std;
 
 namespace Yi{
 	MyMarketApi::MyMarketApi(CThostFtdcMdApi *mdapi){
-		this->mymdapi = mdapi;
-		this->myloginID = 10;				
+		//init api
+		mymdapi = mdapi;
+		myloginID = 10;
+		//creating market file
+		time_t now = time(0);		
+		market_time = localtime(&now);
+		market_file_name = MARKET_FILE + std::to_string(market_time->tm_year) + std::to_string(market_time->tm_mon) + std::to_string(market_time->tm_mday) + ".csv";
+		market_file.open(market_file_name);
+		cout << "Creating market file: " << market_file_name << endl;
+		if(market_file.is_open())
+			cout<< "Successful creating market file" << endl;			
+		else	
+			cout<< "Error in creating file" << endl;
+
+		//reading instruments
+		ifstream instrumentFile("InstrumentID.txt");
+		if(instrumentFile.is_open()){
+			string len;
+		   	getline(instrumentFile,len);
+			instrumentNum = stoi(len);
+			*instrumentID = (char *)malloc(sizeof(char*) * instrumentNum);
+			for(int line = 0; line < instrumentNum; line++){
+				string instrument;
+			   	getline(instrumentFile,instrument); 
+				instrumentID[line] = (char *)malloc(sizeof(char) * instrument.length());
+				strcpy(instrumentID[line], instrument.c_str());	
+			}
+		}
+		else
+			cout<<"Cannot read instruments!" << endl;
+
 	}
 	
 	void MyMarketApi::OnFrontConnected(){
@@ -30,9 +57,8 @@ namespace Yi{
 		if (pRspInfo->ErrorID == 0){
 			cout << "Success login-->ID: " << myloginID << endl;
 			cout << "Requiring market data!" << endl;
-			string tmp = INSTRUMENT;
-			*instrumentID = const_cast<char*>(tmp.c_str());
-			mymdapi->SubscribeMarketData(instrumentID, 1);
+			int ret = mymdapi->SubscribeMarketData(instrumentID, instrumentNum);
+			cout << ((ret == 0)?"Successful subscribe!" : "Failed subscribe!") << endl;
 		}
 	}
 
@@ -43,6 +69,10 @@ namespace Yi{
 	        cout << "Instruments:" << pSpecificInstrument->InstrumentID << endl;
 		cout << "ResponseInfo:" << pRspInfo->ErrorID << " " << pRspInfo->ErrorMsg << endl;
 	}
+
+	void MyMarketApi::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *MarketData){
+	
+	};
 
 	void MyMarketApi::OnRspUnSubMarketData(CThostFtdcSpecificInstrumentField *pSpecificInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast){
 	};
